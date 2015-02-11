@@ -13,6 +13,7 @@ This project is for the back end of the Ichi-go service. This
 web-server is written in Haskell with the Snap web framework.
 
 [![Build Status](https://travis-ci.org/Ichi-go/ichi-go-server.svg?branch=master)](https://travis-ci.org/Ichi-go/ichi-go-server)
+[![BSD3 License](http://img.shields.io/badge/license-BSD3-brightgreen.svg)](https://tldrlegal.com/license/bsd-3-clause-license-%28revised%29)
 
 Build
 -----

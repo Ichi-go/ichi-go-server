@@ -6,8 +6,8 @@ version:             0.1.0.0
 synopsis:            Back end for the ichi-go mobile meetup service.
 -- description:
 homepage:            https://github.com/Ichi-go/ichi-go-server
--- license:
--- license-file:        LICENSE
+license:             BSD3
+license-file:        LICENSE
 author:              Izzy Cecil
 maintainer:          lorr.cecil@gmail.com
 -- copyright:
