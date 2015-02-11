@@ -1,0 +1,1 @@
+main = putStrLn "Weclome to 一期一会!"
