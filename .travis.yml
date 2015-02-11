@@ -1,4 +1,7 @@
 language: haskell
 
+ghc: 7.8
+
 notifications:
   slack: ichi-go:QqmlbblCVTTw11CE8As8dOUs
+  email: false
