@@ -12,7 +12,7 @@ be with.
 This project is for the back end of the Ichi-go service. This
 web-server is written in Haskell with the Snap web framework.
 
-[![Build Status](https://travis-ci.org/Ichi-go/ichi-go-server?branch=master.svg)](https://travis-ci.org/Ichi-go/ichi-go-server)
+[![Build Status](https://travis-ci.org/Ichi-go/ichi-go-server.svg?branch=master)](https://travis-ci.org/Ichi-go/ichi-go-server)
 
 Build
 -----
