@@ -22,10 +22,8 @@ process", then we can water things down!
 
 ## Issue Tracker
 
-For simplicity sake, all issues will be in the ichi-go/ichi-go-android
-project issue tracker. This is so all results will be on the ZenHub
-board. This does mean that pull requests in the ichi-go/ichi-go-server
-project need to have longer closes tags.
+All tickets will be in the ichi-go-project-tracker repository. This
+makes our [ZenHub](zenhub.io) work-flow much nicer.
 
 ## Sprints
 | Sprint   | Dates      |
