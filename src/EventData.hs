@@ -1,5 +1,7 @@
 module EventData where
 
+import System.IO.Error
+
 import Database.HDBC
 import Database.HDBC.Sqlite3
 
@@ -50,14 +52,14 @@ initDB dbName = do
   -- Connect
   conn <- connectSqlite3 dbName
   -- Build table
-  run conn "CREATE TABLE events (\
-           \ id INTEGER PRIMARY KEY,\
-           \ name VARCHAR(127),\
-           \ descript TEXT,\
-           \ lat REAL,\
-           \ lon REAL,\
-           \ location VARCHAR(255)\
-           \ );" []
+  handleSql (\_ -> return (0)) $ run conn "CREATE TABLE events (\
+                                         \ id INTEGER PRIMARY KEY,\
+                                         \ name VARCHAR(127),\
+                                         \ descript TEXT,\
+                                         \ lat REAL,\
+                                         \ lon REAL,\
+                                         \ location VARCHAR(255)\
+                                         \ );" []
   -- Commit
   commit conn
   -- Disconnect
