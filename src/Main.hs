@@ -11,4 +11,14 @@ main = quickHttpServe site
 
 
 site :: Snap ()
-site = writeText "Weclome to 一期一会!"
+site =
+    ifTop (writeText "Weclome to 一期一会!") <|>
+    route [ ("getEvents", eventRequestHandler)
+          , ("getEvents/:eventparam", eventRequestHandler) ]
+
+          
+eventRequestHandler :: Snap ()
+eventRequestHandler = do
+  param <- getParam "eventparam"
+  maybe (writeBS "Sorry, I can't find any events for you")
+        writeBS param
