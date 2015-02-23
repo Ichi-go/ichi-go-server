@@ -27,16 +27,15 @@ reconsEvent [_, sName, sDesc, sLat, sLon, sLoc] =
 {- | Insert event 'e' into Sqlite3 database 'dbName'. -}
 addEvent dbName e = do
   -- Connect
-    conn <- connectSqlite3 dbName
-    -- Build table
-    run conn istat [ toSql $ name e, toSql $ descript e, toSql $ latitude e
-                   , toSql $ longitude e, toSql $ location  e]
-    -- Commit
-    commit conn
-    -- Disconnect
-    disconnect conn
-
-    where istat = "INSERT INTO events VALUES (NULL, ?, ?, ?, ?, ?);"
+  conn <- connectSqlite3 dbName
+  -- Build table
+  let istat = "INSERT INTO events VALUES (NULL, ?, ?, ?, ?, ?);"
+  run conn istat [ toSql $ name e, toSql $ descript e, toSql $ latitude e
+                 , toSql $ longitude e, toSql $ location  e]
+  -- Commit
+  commit conn
+  -- Disconnect
+  disconnect conn
 
 {- | Return all events stored in Sqlite3 database 'dbName'. -}
 queryEvents dbName = do
@@ -44,22 +43,25 @@ queryEvents dbName = do
   conn <- connectSqlite3 dbName
   -- Get all events
   r <- quickQuery' conn "SELECT * FROM events" []
+  -- Disconnect
+  disconnect conn
   return $ map reconsEvent r
 
 {- | Initializes a database to have the needed event table. If the table already
-exists this function will do nothing. -}
+exists this function will do nothing.-}
 initDB dbName = do
   -- Connect
   conn <- connectSqlite3 dbName
   -- Build table
-  handleSql (\_ -> return (0)) $ run conn "CREATE TABLE events (\
-                                         \ id INTEGER PRIMARY KEY,\
-                                         \ name VARCHAR(127),\
-                                         \ descript TEXT,\
-                                         \ lat REAL,\
-                                         \ lon REAL,\
-                                         \ location VARCHAR(255)\
-                                         \ );" []
+  handleSql (\_ -> return (0)) $ run conn
+    "CREATE TABLE events (\
+    \ id INTEGER PRIMARY KEY,\
+    \ name VARCHAR(127),\
+    \ descript TEXT,\
+    \ lat REAL,\
+    \ lon REAL,\
+    \ location VARCHAR(255)\
+    \ );" []
   -- Commit
   commit conn
   -- Disconnect
