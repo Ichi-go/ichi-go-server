@@ -18,13 +18,19 @@ cabal-version:       >=1.10
 
 executable ichi-go-server
   main-is:             Main.hs
-  -- other-modules:
-  -- other-extensions:
+   -- other-modules:
+   -- other-extensions:
   build-depends:
-    base >= 4.7.0.0 && <  4.8,
+    base                      >= 4.7.0.0 && <4.8,
+    bytestring                >= 0.9.1   && < 0.11,
+    MonadCatchIO-transformers >= 0.2.1   && < 0.4,
+    mtl                       >= 2       && < 3,
+    snap-core                 >= 0.9     && < 0.10,
+    snap-server               >= 0.9     && < 0.10,
     HDBC,
-    HDBC-sqlite3,
-    HDBC-postgresql
+    HDBC-sqlite3
+    -- HDBC-postgresql
+
 
   hs-source-dirs:      src
   default-language:    Haskell2010
