@@ -1,9 +1,12 @@
+{-# LANGUAGE OverloadedStrings #-}
 module EventData where
 
 import System.IO.Error
+import Data.Aeson
 
 import Database.HDBC
 import Database.HDBC.Sqlite3
+
 
 {- | Record used to filter out events when querying. -}
 data EventFilter = EventFilter
@@ -16,6 +19,15 @@ data Event = Event { name      :: String
                    , location  :: String
                    } deriving (Show, Eq)
 
+{- | Define the JSON conversion for the Event type. -}
+instance ToJSON Event where
+    toJSON (Event n d lat lon loc) =
+        object [ "name" .=  n
+               , "description" .= d
+               , "latitude" .= lat
+               , "longitude" .= lon
+               , "location" .= loc ]
+           
 {- | Reconstitute an event from a row aquired from 'quickQuery' -}
 reconsEvent [_, sName, sDesc, sLat, sLon, sLoc] =
   Event { name      = (fromSql sName)::String
