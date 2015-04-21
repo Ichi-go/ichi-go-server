@@ -23,8 +23,6 @@ executable ichi-go-server
   build-depends:
     base                      >= 4.6.0.0 && <4.8,
     bytestring                >= 0.9.1   && < 0.11,
-    MonadCatchIO-transformers >= 0.2.1   && < 0.4,
-    mtl                       >= 2       && < 3,
     snap-core                 >= 0.9     && < 0.10,
     snap-server               >= 0.9     && < 0.10,
     snap-extras               >= 0.9     && < 0.10,
