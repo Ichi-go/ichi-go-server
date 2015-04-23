@@ -33,11 +33,9 @@ eventRequestHandler = do
   maybe (writeText "Database error!")
         writeJSON $ Just events
 
+{-| Searches the body for an event in JSON and adds it to the DB -}
 addEventHandler :: Snap ()
 addEventHandler = do
   event <- reqJSON :: Snap Event
-  operation <- insertIntoDatabase event
+  operation <- liftIO $ addEvent "events" event
   writeText "Successfully added event!"
-
-insertIntoDatabase :: Event -> Snap ()
-insertIntoDatabase event = liftIO $ addEvent "events" event
