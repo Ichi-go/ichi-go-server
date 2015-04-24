@@ -22,12 +22,12 @@ executable ichi-go-server
   other-extensions:    OverloadedStrings, DeriveGeneric
   build-depends:
     base >=4.6 && <4.8,
-    HDBC >=2.4 && <2.5,
     transformers >=0.3 && <0.4,
     snap-core >=0.9 && <0.10,
     snap-server >=0.9 && <0.10,
     snap-extras >=0.9 && <0.10,
     aeson >=0.7 && <0.8,
+    --HDBC >=2.4 && <2.5,
     HDBC-sqlite3 >=2.3 && <2.4
   hs-source-dirs:      src
   default-language:    Haskell2010
