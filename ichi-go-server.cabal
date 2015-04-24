@@ -29,7 +29,6 @@ executable ichi-go-server
     snap        >= 0.13 && < 0.13.3,
     text        >=1.1 && <1.2,
     mtl         >=2.0 && <2.2,
-    time        >=1.5 && <1.6,
     HDBC >=2.4 && <2.5,
     HDBC-sqlite3 >=2.3 && <2.4,
     aeson <=0.8
