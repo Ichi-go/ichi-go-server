@@ -11,7 +11,7 @@ import		 Snap.Extras.JSON
 
 import           EventData
 import		 Data.Aeson
-
+        
 main :: IO ()
 main = do
 	initDB "events" --Initializes the DB everytime. We want to change this
@@ -21,7 +21,9 @@ main = do
 site :: Snap ()
 site =
     ifTop (writeText "Weclome to 一期一会!") <|>
-    route [ ("getEvents", eventRequestHandler) ]
+    route [ ("getEvents", eventRequestHandler),
+            ("addEvent", addEventHandler) 
+          ]
 
           
 {-| Returns all requested events as JSON -}          
@@ -30,3 +32,10 @@ eventRequestHandler = do
   events <- liftIO $ queryEvents  "events"
   maybe (writeText "Database error!")
         writeJSON $ Just events
+
+{-| Searches the body for an event in JSON and adds it to the DB -}
+addEventHandler :: Snap ()
+addEventHandler = do
+  event <- reqJSON :: Snap Event
+  operation <- liftIO $ addEvent "events" event
+  writeText "Successfully added event!"

@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, DeriveGeneric #-}
 module EventData where
 
 import System.IO.Error
@@ -7,34 +7,31 @@ import Data.Aeson
 import Database.HDBC
 import Database.HDBC.Sqlite3
 
+import Control.Applicative
+import GHC.Generics
 
 {- | Record used to filter out events when querying. -}
 data EventFilter = EventFilter
 
 {- | Record for internal representation of events. -}
-data Event = Event { name      :: String
-                   , descript  :: String
-                   , latitude  :: Double
-                   , longitude :: Double
-                   , location  :: String
-                   } deriving (Show, Eq)
+data Event = Event { name         :: String
+                   , description  :: String
+                   , latitude     :: Double
+                   , longitude    :: Double
+                   , location     :: String
+                   } deriving (Show, Eq, Generic)
 
 {- | Define the JSON conversion for the Event type. -}
-instance ToJSON Event where
-    toJSON (Event n d lat lon loc) =
-        object [ "name" .=  n
-               , "description" .= d
-               , "latitude" .= lat
-               , "longitude" .= lon
-               , "location" .= loc ]
+instance ToJSON Event
+instance FromJSON Event
            
 {- | Reconstitute an event from a row aquired from 'quickQuery' -}
 reconsEvent [_, sName, sDesc, sLat, sLon, sLoc] =
-  Event { name      = (fromSql sName)::String
-        , descript  = (fromSql sDesc)::String
-        , latitude  = (fromSql sLat )::Double
-        , longitude = (fromSql sLon )::Double
-        , location  = (fromSql sLoc )::String }
+  Event { name         = (fromSql sName)::String
+        , description  = (fromSql sDesc)::String
+        , latitude     = (fromSql sLat )::Double
+        , longitude    = (fromSql sLon )::Double
+        , location     = (fromSql sLoc )::String }
 
 {- | Insert event 'e' into Sqlite3 database 'dbName'. -}
 addEvent dbName e = do
@@ -42,7 +39,7 @@ addEvent dbName e = do
   conn <- connectSqlite3 dbName
   -- Build table
   let istat = "INSERT INTO events VALUES (NULL, ?, ?, ?, ?, ?);"
-  run conn istat [ toSql $ name e, toSql $ descript e, toSql $ latitude e
+  run conn istat [ toSql $ name e, toSql $ description e, toSql $ latitude e
                  , toSql $ longitude e, toSql $ location  e]
   -- Commit
   commit conn
