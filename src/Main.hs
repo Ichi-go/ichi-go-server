@@ -1,16 +1,19 @@
 {-# LANGUAGE OverloadedStrings #-}
+
 module Main where
 
 import           Control.Applicative
 import           Control.Monad.IO.Class
-    
+import           Data.ByteString.Char8
+
+import		 Data.Aeson
 import           Snap.Core
 import           Snap.Util.FileServe
 import           Snap.Http.Server
 import		 Snap.Extras.JSON
 
 import           EventData
-import		 Data.Aeson
+
         
 main :: IO ()
 main = do

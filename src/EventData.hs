@@ -1,14 +1,15 @@
 {-# LANGUAGE OverloadedStrings, DeriveGeneric #-}
 module EventData where
 
+import Control.Applicative
+import GHC.Generics
 import System.IO.Error
-import Data.Aeson
+import System.IO.Error
 
+import Data.Aeson
 import Database.HDBC
 import Database.HDBC.Sqlite3
 
-import Control.Applicative
-import GHC.Generics
 
 {- | Record used to filter out events when querying. -}
 data EventFilter = EventFilter
