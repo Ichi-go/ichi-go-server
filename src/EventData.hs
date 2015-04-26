@@ -4,7 +4,6 @@ module EventData where
 import Control.Applicative
 import GHC.Generics
 import System.IO.Error
-import System.IO.Error
 
 import Data.Aeson
 import Database.HDBC
