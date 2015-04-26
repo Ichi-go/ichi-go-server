@@ -1,17 +1,20 @@
 {-# LANGUAGE OverloadedStrings, DeriveGeneric #-}
 module EventData where
 
+import Control.Applicative
+import GHC.Generics
 import System.IO.Error
-import Data.Aeson
 
+import Data.Aeson
 import Database.HDBC
 import Database.HDBC.Sqlite3
 
-import Control.Applicative
-import GHC.Generics
 
 {- | Record used to filter out events when querying. -}
-data EventFilter = EventFilter
+data EventFilter = EventFilter { flat   :: Double
+                               , flon   :: Double
+                               , radius :: Double
+                               } deriving (Show, Eq)
 
 {- | Record for internal representation of events. -}
 data Event = Event { name         :: String
@@ -35,26 +38,28 @@ reconsEvent [_, sName, sDesc, sLat, sLon, sLoc] =
 
 {- | Insert event 'e' into Sqlite3 database 'dbName'. -}
 addEvent dbName e = do
-  -- Connect
   conn <- connectSqlite3 dbName
-  -- Build table
   let istat = "INSERT INTO events VALUES (NULL, ?, ?, ?, ?, ?);"
   run conn istat [ toSql $ name e, toSql $ description e, toSql $ latitude e
-                 , toSql $ longitude e, toSql $ location  e]
-  -- Commit
+                 , toSql $ longitude e, toSql $ location  e ]
   commit conn
-  -- Disconnect
   disconnect conn
 
 {- | Return all events stored in Sqlite3 database 'dbName'. -}
-queryEvents dbName = do
-  -- Connect to database
+queryEvents dbName filter = do
   conn <- connectSqlite3 dbName
-  -- Get all events
-  r <- quickQuery' conn "SELECT * FROM events" []
-  -- Disconnect
+  r    <- quickQuery' conn qstring qdata
   disconnect conn
   return $ map reconsEvent r
+  where
+    qdata = maybe [] (\f -> [ toSql $ (flat f) - (radius f)
+                            , toSql $ (flat f) + (radius f)
+                            , toSql $ (flon f) - (radius f)
+                            , toSql $ (flon f) + (radius f) ]) filter
+    qstring = maybe "SELECT * FROM events" (\_ -> "SELECT * FROM events \
+                                                  \ WHERE lat BETWEEN ? AND ?\
+                                                  \ AND   lon BETWEEN ? AND ?") filter
+                                         
 
 {- | Initializes a database to have the needed event table. If the table already
 exists this function will do nothing.-}
@@ -71,7 +76,5 @@ initDB dbName = do
     \ lon REAL,\
     \ location VARCHAR(255)\
     \ );" []
-  -- Commit
   commit conn
-  -- Disconnect
   disconnect conn
