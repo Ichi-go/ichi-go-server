@@ -15,12 +15,14 @@ import		 Snap.Extras.JSON
 
 import           EventData
 
+defaultDBName = "events"
         
 main :: IO ()
 main = do
   Prelude.putStr "Weclome to 一期一会!"
   Prelude.putStr "Initializing Database..."
-  initDB "events" --Initializes the DB everytime. We want to change this
+  
+  initDB defaultDBName --Initializes the DB everytime. We want to change this
   quickHttpServe site
 
 {-| Serves the Ichi-Go web site -}
@@ -36,16 +38,13 @@ site =
 eventRequestHandler :: Snap ()
 eventRequestHandler = do
   bfilter <- filter
-  events  <- liftIO $ queryEvents "events" bfilter
+  events  <- liftIO $ queryEvents defaultDBName bfilter
   maybe (writeText "Database error!")
         writeJSON $ Just events
   where
     filter = do
       rawLat <- getPostParam "lat"
       rawLon <- getPostParam "lon"
-      logError $ fromMaybe "???" rawLat
-      logError $ fromMaybe "???" rawLon
-      -- logError "Post from LAT: " ++ (fromMaybe "???" rawLat) ++" LON: " ++ (fromMaybe "???" rawLon)
       return $ makeEventFilter rawLat rawLon
 
 {-| Returns a Maybe EventFilter from the QueryParams used in
@@ -61,5 +60,5 @@ makeEventFilter rawLat rawLon = do
 addEventHandler :: Snap ()
 addEventHandler = do
   event <- reqJSON :: Snap Event
-  operation <- liftIO $ addEvent "events" event
+  operation <- liftIO $ addEvent defaultDBName event
   writeText "Successfully added event!"

@@ -39,15 +39,11 @@ reconsEvent [_, sName, sDesc, sLat, sLon, sLoc] =
 
 {- | Insert event 'e' into Sqlite3 database 'dbName'. -}
 addEvent dbName e = do
-  -- Connect
   conn <- connectSqlite3 dbName
-  -- Build table
   let istat = "INSERT INTO events VALUES (NULL, ?, ?, ?, ?, ?);"
   run conn istat [ toSql $ name e, toSql $ description e, toSql $ latitude e
-                 , toSql $ longitude e, toSql $ location  e]
-  -- Commit
+                 , toSql $ longitude e, toSql $ location  e ]
   commit conn
-  -- Disconnect
   disconnect conn
 
 {- | Return all events stored in Sqlite3 database 'dbName'. -}
@@ -81,7 +77,5 @@ initDB dbName = do
     \ lon REAL,\
     \ location VARCHAR(255)\
     \ );" []
-  -- Commit
   commit conn
-  -- Disconnect
   disconnect conn
