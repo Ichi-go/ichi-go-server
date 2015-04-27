@@ -61,4 +61,4 @@ addEventHandler :: Snap ()
 addEventHandler = do
   event <- reqJSON :: Snap Event
   operation <- liftIO $ addEvent defaultDBName event
-  writeText "Successfully added event!"
+  writeText operation
