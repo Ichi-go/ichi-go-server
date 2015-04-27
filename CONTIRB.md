@@ -53,7 +53,7 @@ When work is done, submit a pull request and move the ticket to the
 request, check the build status, and make sure that any added code is
 tested appropriately.
 
-##Comit Messages
+##Commit Messages
 Commit messages should all have the following form:
 ```TAG: A small explanation of what happened (under 80 char).```
 If more content is necessary, it can be added to lines bellow. `TAG` can
