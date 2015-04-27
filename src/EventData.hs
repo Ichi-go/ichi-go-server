@@ -42,8 +42,10 @@ addEvent dbName e = do
   let istat = "INSERT INTO events VALUES (NULL, ?, ?, ?, ?, ?);"
   run conn istat [ toSql $ name e, toSql $ description e, toSql $ latitude e
                  , toSql $ longitude e, toSql $ location  e ]
+  r <- quickQuery' conn "SELECT last_insert_rowid() as last_id" []
   commit conn
   disconnect conn
+  (return . fromSql . head . head) r
 
 {- | Return all events stored in Sqlite3 database 'dbName'. -}
 queryEvents dbName filter = do

@@ -60,5 +60,5 @@ makeEventFilter rawLat rawLon = do
 addEventHandler :: Snap ()
 addEventHandler = do
   event <- reqJSON :: Snap Event
-  operation <- liftIO $ addEvent defaultDBName event
-  writeText "Successfully added event!"
+  eventId <- liftIO $ addEvent defaultDBName event
+  writeText eventId
