@@ -30,7 +30,8 @@ site :: Snap ()
 site =
   ifTop (writeText "Weclome to 一期一会!") <|>
   route [ ("getEvents", eventRequestHandler),
-          ("addEvent", addEventHandler) 
+          ("addEvent", addEventHandler),
+          ("deleteEvent", deleteEventHandler)
         ]
 
           
@@ -62,3 +63,9 @@ addEventHandler = do
   event <- reqJSON :: Snap Event
   eventId <- liftIO $ addEvent defaultDBName event
   writeText eventId
+
+{-| Deletes an event with the specified ID -}
+deleteEventHandler :: Snap ()
+deleteEventHandler = do
+  eId <- getPostParam "id"
+  liftIO $ deleteEvent defaultDBName eId

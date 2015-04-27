@@ -47,6 +47,15 @@ addEvent dbName e = do
   disconnect conn
   (return . fromSql . head . head) r
 
+{- | Delete an event with event id eId -}
+deleteEvent dbName eId = do
+  conn <- connectSqlite3 dbName
+  let query = "DELETE FROM events WHERE id = ?"
+  run conn query [toSql eId]
+  commit conn
+  disconnect conn
+
+
 {- | Return all events stored in Sqlite3 database 'dbName'. -}
 queryEvents dbName filter = do
   conn <- connectSqlite3 dbName
